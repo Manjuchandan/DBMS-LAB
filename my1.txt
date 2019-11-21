@@ -1,0 +1,152 @@
+create table employee
+(  ssn char(10),
+   name varchar(20),
+   deptno int,
+   primary key(ssn)
+);
+create table assigned_to
+( ssn char(10),
+  projectno int,
+  primary key(ssn,projectno),
+  foreign key(ssn) references employee(ssn) on delete cascade,
+  foreign key(projectno) references project(projectno)  on delete cascade
+);
+
+create table project
+( projectno int,
+  projectarea varchar(10),
+  primary key(projectno)
+);
+
+
+
+
+desc employee
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ SSN					   NOT NULL CHAR(4)
+ NAME						    VARCHAR2(10)
+ DEPTNO 					    NUMBER(38)
+
+SQL> desc project
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ PROJECTNO				   NOT NULL NUMBER(38)
+ PROJECT_AREA					    VARCHAR2(10)
+
+SQL> desc assigned_to
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ SSN					   NOT NULL CHAR(4)
+ PROJECTNO				   NOT NULL NUMBER(38)
+
+SQL> insert into employee values('is1','rama',10);
+
+1 row created.
+
+SQL> insert into employee values('is2','shama',11);
+
+1 row created.
+
+SQL> insert into employee values('is3','bheema',12);
+
+1 row created.
+
+SQL> insert into employee values('is4','krishna',13);
+
+1 row created.
+
+SQL> insert into project values(25,'dms');
+
+1 row created.
+
+SQL> insert into project values(26,'ML');
+
+1 row created.
+
+SQL> insert into project values(27,'database');
+
+1 row created.
+
+SQL> insert into project values(28,'ai');
+
+1 row created.
+
+SQL> insert into assigned_to values('is2',28);
+
+1 row created.
+
+SQL>  insert into assigned_to values('is3',27);
+
+1 row created.
+
+SQL>  insert into assigned_to values('is1',25);
+
+1 row created.
+
+SQL>  insert into assigned_to values('is4',26);
+
+1 row created.
+
+SQL> select * from employee;
+
+SSN  NAME	    DEPTNO
+---- ---------- ----------
+is1  rama		10
+is2  shama		11
+is3  bheema		12
+is4  krishna		13
+
+SQL> select * from project;
+
+ PROJECTNO PROJECT_AR
+---------- ----------
+	25 dms
+	26 ML
+	27 database
+	28 ai
+
+SQL> select * from assigned_to;
+
+SSN   PROJECTNO
+---- ----------
+is1	     25
+is2	     28
+is3	     27
+is4	     26
+
+SQL> select ssn from assigned_to,project where project_area='database' and assigned_to.projectno=project.projectno;
+
+SSN
+----
+is3
+
+SQL> select deptno,count(ssn) from employee group by deptno;
+
+    DEPTNO COUNT(SSN)
+---------- ----------
+	11	    1
+	13	    1
+	10	    1
+	12	    1
+
+SQL> update assigned_to set projectno=28 where ssn='is1';
+
+1 row updated.
+
+SQL> select * from assigned_to;
+
+SSN   PROJECTNO
+---- ----------
+is1	     28
+is2	     28
+is3	     27
+is4	     26
+
+SQL> select name from employee,assigned_to where projectno=28 and employee.ssn=assigned_to.ssn;
+
+NAME
+----------
+rama
+shama
+

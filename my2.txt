@@ -1,0 +1,140 @@
+create table part(
+  2  pno int primary key,
+  3  pname varchar(10),
+  4  colour varchar(10));
+
+Table created.
+
+SQL> create table supplier(
+  2  sno int primary key,
+  3  sname varchar(10),
+  4  address varchar(10));  
+
+Table created.
+
+SQL> create table supply(
+  2  pno int,
+  3  sno int,
+  4  quantity int,
+  5  primary key(pno,sno),
+  6  foreign key(pno) references part(pno) on delete cascade,
+  7  foreign key(sno) references supplier(sno) on delete cascade);
+
+Table created.
+
+SQL> insert into part values(50,'bolt','silver');
+
+1 row created.
+
+SQL> insert into part values(60,'bench','brown');
+
+1 row created.
+
+SQL> insert into part values(70,'table','green');
+
+1 row created.
+
+SQL> insert into part values(80,'bed','red');
+
+1 row created.
+
+SQL> insert into supplier values(420,'RAM','pune');
+
+1 row created.
+
+SQL>  insert into supplier values(520,'sham','mumbai');
+
+1 row created.
+
+SQL>  insert into supplier values(620,'gaja','swiz');
+
+1 row created.
+
+SQL>  insert into supplier values(720,'arjuna','coorg');
+
+1 row created.
+
+SQL>  insert into supplier values(700,'sadwi','kpark');
+
+1 row created.
+
+SQL> insert into supply values(60,700,1);
+
+1 row created.
+
+SQL>  insert into supply values(80,420,2);
+
+1 row created.
+
+SQL>  insert into supply values(50,620,3);
+
+1 row created.
+
+SQL>  insert into supply values(70,520,4);
+
+1 row created.
+
+SQL>  insert into supply values(90,720,5);
+ insert into supply values(90,720,5)
+*
+ERROR at line 1:
+ORA-02291: integrity constraint (MANJUNATHA.SYS_C007011) violated - parent key
+not found
+
+
+SQL> select * from part;
+
+       PNO PNAME      COLOUR
+---------- ---------- ----------
+	50 bolt       silver
+	60 bench      brown
+	70 table      green
+	80 bed	      red
+
+SQL> select * from supplier
+  2  ;
+
+       SNO SNAME      ADDRESS
+---------- ---------- ----------
+       420 RAM	      pune
+       520 sham       mumbai
+       620 gaja       swiz
+       720 arjuna     coorg
+       700 sadwi      kpark
+
+SQL> select * from supply;
+
+       PNO	  SNO	QUANTITY
+---------- ---------- ----------
+	60	  700	       1
+	80	  420	       2
+	50	  620	       3
+	70	  520	       4
+
+SQL> select pno from supplier,supply where sname='ram' and supplier.sno=supply.sno;
+
+no rows selected
+
+SQL> select pno from supplier,supply where sname='RAM' and supplier.sno=supply.sno;
+
+       PNO
+----------
+	80
+
+SQL> select sname from part,supplier,supply where pname='bolt' and part.pno=supply.pno and supplier.sno=supply.sno;
+
+SNAME
+----------
+gaja
+
+SQL> delete pname from part where colour='green';
+delete pname from part where colour='green'
+             *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended
+
+
+SQL> delete from part where colour='green';
+
+1 row deleted.
+

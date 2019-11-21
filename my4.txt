@@ -1,0 +1,133 @@
+SQL> create table parts(
+  2  pno int primary key,
+  3  pname varchar(10),
+  4  colour varchar(10));
+
+Table created.
+
+SQL> create table warehouse(
+  2  wno int primary key,
+  3  wname varchar(10),
+  4  city varchar(10));
+
+Table created.
+
+SQL> create table shipments(
+  2   pno int,
+  3  wno int,
+  4   quantity int,
+  5  day varchar(10),
+  6   primary key(pno,wno),
+  7  foreign key(pno) references parts(pno),
+  8  foreign key(wno) references warehouse(wno));
+
+Table created.
+
+SQL> insert into shipment values(1,5,50,'monday');
+insert into shipment values(1,5,50,'monday')
+            *
+ERROR at line 1:
+ORA-00913: too many values
+
+
+SQL> drop table shipment;
+
+Table dropped.
+
+SQL> insert into shipments values(1,5,50,'monday');
+
+1 row created.
+
+SQL> insert into shipments values(2,6,60,'12/12/12');
+
+1 row created.
+
+SQL> insert into shipments values(3,7,70,'fridaY');
+
+1 row created.
+
+SQL> insert into shipments values(4,8,80,'sunday');
+
+1 row created.
+
+SQL> select * from parts
+  2  ;
+
+       PNO PNAME      COLOUR
+---------- ---------- ----------
+	 1 pen	      blue
+	 2 ball       green
+	 3 desk       red
+	 4 pencil     pink
+
+SQL> select * from warehouse;
+
+       WNO WNAME      CITY
+---------- ---------- ----------
+	 5 villa      munnar
+	 6 duplex     coorg
+	 7 single     delhi
+	 8 attach     magadi
+
+SQL> select * from shipments;
+
+       PNO	  WNO	QUANTITY DAY
+---------- ---------- ---------- ----------
+	 1	    5	      50 monday
+	 2	    6	      60 12/12/12
+	 3	    7	      70 fridaY
+	 4	    8	      80 sunday
+
+
+
+SQL> select wname from parts,warehouse,shipments where colour='red' and parts.pno=shipments.pno and warehouse.wno=shipments.wno;
+
+WNAME
+----------
+single
+
+select pno,wname from shipments,warehouse where warehouse.wno=shipments.wno
+  2  ;
+
+       PNO WNAME
+---------- ----------
+	 1 villa
+	 2 duplex
+	 3 single
+	 4 attach
+
+SQL> select bid,sname from sailor,reserves where sailor.sid=reserves.sid;
+
+       BID SNAME
+---------- ----------
+	 6 malya
+	 7 ambani
+	 8 mayur
+	 5 indra
+
+select wno,count(pno) from shipments group by wno;
+
+       WNO COUNT(PNO)
+---------- ----------
+	 6	    1
+	 5	    1
+	 8	    1
+	 7	    1
+
+SQL> select shipments.wno,count(pno) from warehouse,shipments where warehouse.wno=shipments.wno group by shipments.wno;
+
+       WNO COUNT(PNO)
+---------- ----------
+	 6	    1
+	 5	    1
+	 8	    1
+	 7	    1
+select wno,sum(quantity) Total_Quantity from shipments group by wno;
+
+       WNO TOTAL_QUANTITY
+---------- --------------
+	 6	       60
+	 5	       50
+	 8	       80
+	 7	       70
+

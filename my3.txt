@@ -1,0 +1,123 @@
+     
+  1   create table boat(
+  2  bid int primary key,
+  3  bname varchar(10),
+  4  colour varchar(10));
+
+Table created.
+
+SQL> create table sailor(
+  2  sid int primary key,
+  3  sname varchar(10),
+  4  age int,
+  5  rating int);
+
+Table created.
+
+SQL> create table reserves(
+  2  bid int,
+  3  sid int,
+  4  day varchar(10),
+  5  primary key(bid,sid),
+  6  foreign key(bid) references boat(bid),
+  7  foreign key(sid) references sailor(sid));
+
+Table created.
+
+SQL> insert into boat values(5,'indigo','white'0;
+insert into boat values(5,'indigo','white'0
+                                          *
+ERROR at line 1:
+ORA-00917: missing comma
+
+
+SQL> insert into boat values(5,'indigo','white');
+
+1 row created.
+
+SQL> insert into boat values(6,'airlines','red');
+
+1 row created.
+
+SQL> insert into boat values(7,'kingfisher','pink');
+
+1 row created.
+
+SQL> insert into boat values(8,'asian','orange');
+
+1 row created.
+
+SQL> insert into sailor values(1,'indra',50,5);
+
+1 row created.
+
+SQL> insert into sailor values(2,'ambani',60,4);
+
+1 row created.
+
+SQL> insert into sailor values(3,'malya',70,3);
+
+1 row created.
+
+SQL> insert into sailor values(4,'mayur',21,4.5);
+
+1 row created.
+
+SQL> insert into reserves values(6,3,'monday');
+
+1 row created.
+
+SQL>  insert into reserves values(7,2,'tuesday');
+
+1 row created.
+
+SQL>  insert into reserves values(8,4,'saturday');
+
+1 row created.
+
+SQL>  insert into reserves values(5,1,'friday');
+
+1 row created.
+
+SQL> select * from boat;
+
+       BID BNAME      COLOUR
+---------- ---------- ----------
+	 5 indigo     white
+	 6 airlines   red
+	 7 kingfisher pink
+	 8 asian      orange
+
+SQL> select * from sailor;
+
+       SID SNAME	     AGE     RATING
+---------- ---------- ---------- ----------
+	 1 indra	      50	  5
+	 2 ambani	      60	  4
+	 3 malya	      70	  3
+	 4 mayur	      21	  5
+
+SQL> select * from reserves;
+
+       BID	  SID DAY
+---------- ---------- ----------
+	 6	    3 monday
+	 7	    2 tuesday
+	 8	    4 saturday
+	 5	    1 friday
+
+SQL> select bid from reserves,sailor where sname='malya' and sailor.sid=reserves.sid;
+
+       BID
+----------
+	 6
+
+select sid,count(bid) from reserves group by sid;
+
+       SID COUNT(BID)
+---------- ----------
+	 1	    1
+	 2	    1
+	 4	    1
+	 3	    1
+
